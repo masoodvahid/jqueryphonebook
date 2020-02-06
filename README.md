@@ -24,4 +24,4 @@ ModrenBrowser (maybe newer than 2016)
 حجم فایلهای آپلودی صحت سنجی می شود و میزان حجم از طریق فایل کانفیگ قابل تغییر است<br>
 در ورژن 1 اطلاعات بصورت یونیکد در دیتابیس ذخیره میشوند و کاراکترهای فارسی بصورت مستقیم قابل دریافت نخواهند بود<br>
 </p>
-![Index Page](https://github.com/masoodvahid/jqueryphonebook/screenshots/index.jpg)
+![Index Page](https://github.com/masoodvahid/jqueryphonebook/tree/master/screenshots/index.jpg)
