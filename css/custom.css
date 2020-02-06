@@ -1,0 +1,137 @@
+body {
+    font-family: 'Vazir', gandom, tahome;
+    padding:20px;
+    font-size:12px;
+    margin:0;
+}
+
+.container {
+    width: 850px;
+    margin: 10px auto;
+}
+
+.panel-title {
+    text-align: center;
+}
+
+.datagrid-toolbar{
+    text-align: right;
+    direction: rtl;
+}
+
+.demo-info{
+	padding:0 0 12px 0;
+}
+
+.demo-tip{
+	display:none;
+}
+
+.label-top{
+    display: block;
+    height: 22px;
+    line-height: 22px;
+    vertical-align: middle;
+}
+
+.panel-title{
+    font-size: 20px;    
+    height: 35px;
+    line-height: 35px;
+}
+
+.panel-header{
+    border-radius: 5px 5px 0 0;
+}
+
+.panel-body{
+    border-radius: 0 0 5px 5px;
+}
+
+.window-thinborder .window-body {
+    direction: rtl;
+}
+
+.textbox-label{
+    padding-right: 2px;
+    padding-left: 0;
+}
+
+.gender {
+    height: 58px !important;
+    border-radius: 5px;
+    padding: 2px;
+}
+
+.right-align {
+    float: left;
+    direction: rtl;
+}
+
+.phone-input {
+    padding: 5px;
+    border-radius: 2px;   
+}
+
+.window-body{
+    direction: rtl;
+}
+
+/* .btn {
+    padding: 4px 13px 3px;
+    border-radius: 5px;
+    margin: 0 2px;
+    font-family: 'shabnam', tahoma;
+    cursor: pointer;
+} */
+
+/* .btn-remove {
+    background-color: #fa9d9d;
+    border: 1px solid #c96c6c;
+}
+
+.btn-remove:hover{
+    background-color: #f23030;
+    border: 1px solid #c96c6c;
+}
+
+.btn-save {
+    background-color: #9dfafa;
+    border: 1px solid #49b8b8;
+}
+
+.btn-save:hover{
+    background-color: #30dbf2;    
+} */
+
+.dv-table input {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    height: 28px;
+    margin: 2px 0;
+}
+
+.phone-type {
+    border-radius: 4px;
+    border: 1px solid #cecece;
+    height: 28px;
+    margin: 0 3px;    
+}
+
+.phone-number {
+    letter-spacing: 0px;
+    text-align: center;
+    font-family: b titr, vazir, tahoma;
+    font-size: 120%;
+}
+
+select {
+    height: 29px;
+    border-radius: 5px;
+    border: 1px solid #cecece;
+    font-family: shabnam,tahoma;
+}
+
+input {
+    font-family: shabnam;
+}

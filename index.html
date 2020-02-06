@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Voip Phonebook Version 1.0.0</title>
+    <link rel="stylesheet" type="text/css" href="css/easyui.css">
+    <link rel="stylesheet" type="text/css" href="css/icon.css">  
+    <link rel="stylesheet" type="text/css" href="css/custom.css">  
+    <link rel="stylesheet" type="text/css" href="css/easyui-rtl.css">
+    <link rel='icon' href='css/images/favicon.png' type='image/png' >
+
+    <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="js/datagrid-detailview.js"></script>
+    <script type="text/javascript" src="js/datagrid-cellediting.js"></script>
+    <script type="text/javascript" src="js/easyui-rtl.js"></script>
+    <script type="text/javascript" src="js/easyui-lang-fa.js" id="script-lang" ></script>
+</head>
+<body>
+    <div class="container">
+    <h2>VoIP Phonebook</h2>
+        <table id="dg" title="اطلاعات موجود در دیتابیس" style="width:100%;height:630px"
+                url="library/get_users.php"
+                toolbar="#toolbar" pagination="true"
+                fitColumns="true" singleSelect="true"
+                sortName="uid" sortOrder="desc"
+                rownumbers="true">
+            <thead>
+                <tr>
+                    <th field="firstname" width="30" sortable="true">نام</th>
+                    <th field="lastname" width="40" sortable="true">نام خانوادگی</th>                    
+                    <th field="phone" width="30" sortable="true">شماره تماس</th>
+                    <th sortable="true" data-options="field:'soundfile',formatter:formatSoundfile">فایل</th>
+                    
+                    <th field="uid" sortable="true">ID</th>
+                </tr>
+            </thead>
+        </table>
+        <div id="toolbar">
+            <div class="right-align">                
+                <input id="firstname" style="line-height:25px;border:1px solid #ccc; border-radius: 2px; margin: 2px 0; padding: 0 8px" placeholder="نام">
+                <input id="lastname"  style="line-height:25px;border:1px solid #ccc; border-radius: 2px; margin: 2px 0; padding: 0 8px" placeholder="نام خانوادگی">                
+                <input id="phone"  style="line-height:25px;border:1px solid #ccc; border-radius: 2px; margin: 2px 0; padding: 0 8px" placeholder="شماره تماس">                
+                <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search" onclick="doSearch()">جستجو</a>
+            </div>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUser()">جدید</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">ویرایش</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyUser()">حذف</a>
+        </div>
+    </div>
+    <div id="dlg" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+        <form id="fm" method="post" enctype="multipart/form-data" style="margin:0;padding:20px 50px">
+            <p>لطفا کلیه اطلاعات را به زبان فارسی وارد نمایید.</p>
+			<div style="margin-bottom:10px">
+				<input name="firstname" class="easyui-textbox" required="true" label="نام" style="width:100%">
+			</div>
+			<div style="margin-bottom:10px">
+				<input name="lastname" class="easyui-textbox" required="true" label="نام خانوادگی:" style="width:100%">
+            </div>	            
+            <div style="margin-bottom:10px">
+                <select name="gender" class="easyui-combobox" panelHeight="auto" label="جنسیت" style="width:100%">
+                    <option value="1" selected>آقا</option>
+                    <option value="0">خانم</option>
+                </select>                
+            </div> 
+            <div style="margin-bottom:10px">
+				<input name="phone" class="easyui-textbox" required="true" label="شماره تماس:" style="width:100%">
+            </div>           
+            <p>
+                فقط فایلهای با فرمت wave قابل قبول هستند.
+            </p>
+            <div>
+                <input name="soundfile" class="easyui-filebox" label="فایل صوتی" style="width:100%">	
+            </div>  
+		</form>
+    </div>
+    <div id="dlg-buttons">
+		<a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">ذخیره</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">لغو</a>
+	</div>
+    <script type="text/javascript">
+        function formatSoundfile(val,row){
+            var url = "uploads/";
+            //console.log(row.soundfile);
+            if (!$.isEmptyObject(row.soundfile)){
+                return '<audio controls><source src="'+ url + row.soundfile +'" /></audio>';
+            }           
+        }
+        $(function(){
+            $('#dg').datagrid({
+                view: detailview,
+                detailFormatter:function(index,row){
+                    return '<div class="ddv"></div>';
+                },
+                onExpandRow: function(index,row){
+                    var ddv = $(this).datagrid('getRowDetail',index).find('div.ddv');
+                    ddv.panel({
+                        border:false,
+                        cache:true,
+                        href:'library/phone_list.php?uid='+row.uid+'&index='+index,
+                        onLoad:function(){                            
+                            $('#dg').datagrid('fixDetailRowHeight',index);
+                            $('#dg').datagrid('selectRow',index);
+                            //$('#dg').datagrid('getRowDetail',index).find('form').form('load',row);
+                        }
+                    });
+                    $('#dg').datagrid('fixDetailRowHeight',index);
+                }
+            });
+        });
+        
+        function cancelItem(index){
+            var row = $('#dg').datagrid('getRows')[index];
+            if (row.isNewRecord){
+                $('#dg').datagrid('deleteRow',index);
+            } else {
+                $('#dg').datagrid('collapseRow',index);
+            }
+        }
+                        
+        function newUser(){
+			$('#dlg').dialog('open').dialog('center').dialog('setTitle','ایجاد مخاطب جدید');
+			$('#fm').form('clear');
+			url = 'library/operations.php';
+        }
+
+        function editUser(){
+            var row = $('#dg').datagrid('getSelected');
+            if (row){
+                $('#dlg').dialog('open').dialog('center').dialog('setTitle','ویرایش مخاطب');
+                $('#fm').form('load',row);
+                url = 'library/operations.php?opr=update&uid='+row.uid+'&oldphone='+row.phone;
+            }
+        }
+
+        function destroyUser(){
+            var row = $('#dg').datagrid('getSelected');
+            if (row){
+                $.messager.confirm('حذف اطلاعات تماس','حذف اطلاعات غیرقابل بازگشت است. آیا اطمینان دارید ؟',function(r){
+                    if (r){
+                        var index = $('#dg').datagrid('getRowIndex',row);
+                        $.post('library/operations.php',{uid:row.uid , opr: 'delete'},function(){                            
+                            $('#dg').datagrid('deleteRow',index);                      
+                            $.messager.show({
+                                title: 'حذف شد',
+                                msg: 'مخاطب با موفقیت حذف شد.'
+                            });
+                        });
+                    }
+                });
+            }
+        }
+        
+        function saveUser(){
+			$('#fm').form('submit',{
+				url: url,
+				onSubmit: function(){
+					return $(this).form('validate');
+				},
+				success: function(result){
+					var result = eval('('+result+')');
+					if (result.errorMsg){
+						$.messager.show({
+							title: 'خطا',
+							msg: result.errorMsg
+						});
+					} else {
+						$('#dlg').dialog('close');		// close the dialog
+                        $('#dg').datagrid('reload');	// reload the user data
+                        $.messager.show({
+							title: 'ثبت شد',
+							msg: result.successMsg
+						});
+					}
+				}
+			});
+        }
+
+        function doSearch(){
+            $('#dg').datagrid('load',{
+                firstname: $('#firstname').val(),
+                lastname: $('#lastname').val(),
+                phone: $('#phone').val()
+            });
+        }
+       
+    </script>
+    <style type="text/css">
+        form{
+            margin:0;
+            padding:0;
+        }
+        .dv-table td{
+            border:0;
+        }
+        .dv-table input{
+            border:1px solid #ccc;
+        }
+    </style>
+    
+</body>
+</html>
